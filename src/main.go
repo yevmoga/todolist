@@ -1,20 +1,29 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
+	"awesomeProject/config"
+	"awesomeProject/todolist"
+	"github.com/sirupsen/logrus"
+	"go.uber.org/dig"
 )
 
 func main() {
-	fmt.Println("Hello world!")
+	container := provide()
 
-	r := gin.Default()
+	logrus.Info("running rpc server")
+	if err := container.Invoke(func(handler todolist.Server) {
+		handler.Launch()
+	}); err != nil {
+		panic(err)
+	}
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello World",
-		})
-	})
+}
 
-	r.Run()
+func provide() *dig.Container {
+	container := dig.New()
+	container.Provide(config.NewEnv)
+	container.Provide(config.NewDatabase)
+	container.Provide(todolist.NewTodoListServer)
+
+	return container
 }

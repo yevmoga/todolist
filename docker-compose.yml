@@ -1,0 +1,19 @@
+version: '2'
+
+volumes:
+  database_data:
+    driver: local
+
+services:
+  redis:
+    image: redis
+    ports:
+    - 6379:6379
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: Cdef31e9
+    volumes:
+      - database_data:/var/lib/postgresql/data
