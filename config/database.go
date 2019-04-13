@@ -6,14 +6,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func NewDatabase(config Configuration) (*gorm.DB, error) {
+func NewDatabase(config Configuration) *gorm.DB {
 	db, err := gorm.Open("postgres", config.DatabaseConnection)
-	defer db.Close()
 
 	if err != nil {
-		return nil, err
+		panic("error connection to database: " + err.Error())
 	}
 
+	db.LogMode(true)
+	db.SetLogger(logrus.StandardLogger())
+
 	logrus.Info("successful database connection")
-	return db, nil
+	return db
 }

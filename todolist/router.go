@@ -8,45 +8,25 @@ type Server interface {
 	Launch()
 }
 
-func NewTodoListServer() Server {
-	return &TodoListServer{}
+func NewTodoListServer(repository Repository) Server {
+	return &TodoListServer{
+		repository: repository,
+	}
 }
 
-type TodoListServer struct{}
+type TodoListServer struct {
+	repository Repository
+}
 
-func (TodoListServer) Launch() {
+func (t *TodoListServer) Launch() {
 	router := gin.Default()
 
-	router.GET("/", GetTodoList)
-	router.POST("/", PostTodoList)
-	router.PUT("/", PutTodoList)
-	router.DELETE("/", DeleteTodoList)
+	router.GET("/", t.get())
+	//router.POST("/", t.post())
+	//router.PUT("/", t.put())
+	//router.DELETE("/", t.delete())
 
 	if err := router.Run(); err != nil {
 		panic(err)
 	}
-}
-
-func GetTodoList(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Hello World",
-	})
-}
-
-func PostTodoList(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Post Hello World",
-	})
-}
-
-func PutTodoList(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Put Hello World",
-	})
-}
-
-func DeleteTodoList(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Delete Hello World",
-	})
 }

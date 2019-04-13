@@ -23,6 +23,7 @@ func provide() *dig.Container {
 	container := dig.New()
 	container.Provide(config.NewEnv)
 	container.Provide(config.NewDatabase)
+	container.Provide(todolist.NewMysqlRepository)
 	container.Provide(todolist.NewTodoListServer)
 
 	return container

@@ -10,10 +10,13 @@ services:
     ports:
     - 6379:6379
 
-  db:
-    image: postgres:latest
-    restart: always
+  postgres:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: Cdef31e9
+      - POSTGRES_USER=hola
+      - POSTGRES_PASSWORD=hola
+      - POSTGRES_DB=holadb
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
