@@ -5,7 +5,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (t *TodoListServer) put() func(c *gin.Context) {
+func (t *TodoListServer) delete() func(c *gin.Context) {
 	return func(c *gin.Context) {
 
 		var task Task
@@ -18,7 +18,7 @@ func (t *TodoListServer) put() func(c *gin.Context) {
 			return
 		}
 
-		if err := task.ValidateByFields([]string{validateByShowingDate, validateByTitle, validateById, validateByDone}); err != nil {
+		if err := task.ValidateByFields([]string{validateById}); err != nil {
 			logrus.WithError(err).Error("validation error")
 			c.JSON(200, map[string]string{
 				"error": err.Error(),
@@ -26,14 +26,14 @@ func (t *TodoListServer) put() func(c *gin.Context) {
 			return
 		}
 
-		if err := t.repository.UpdateTask(&task); err != nil {
-			logrus.WithError(err).Error("error updating daily task")
+		if err := t.repository.DeleteTask(&task); err != nil {
+			logrus.WithError(err).Error("error deleting daily task")
 			c.JSON(200, map[string]string{
 				"error": err.Error(),
 			})
 			return
 		}
 
-		c.JSON(200, task)
+		c.JSON(200, map[string]string{"result": "task deleted"})
 	}
 }

@@ -8,6 +8,7 @@ type Repository interface {
 	GetAllForToday() (tasks []Task, err error)
 	CreateNewTask(task *Task) error
 	UpdateTask(task *Task) error
+	DeleteTask(task *Task) error
 }
 
 func NewMysqlRepository(database *gorm.DB) Repository {
@@ -31,4 +32,8 @@ func (m *MysqlRepository) CreateNewTask(task *Task) error {
 
 func (m *MysqlRepository) UpdateTask(task *Task) error {
 	return m.database.Model(task).UpdateColumns(Task{Title: task.Title, Done: task.Done, ShowingDate: task.ShowingDate}).Error
+}
+
+func (m *MysqlRepository) DeleteTask(task *Task) error {
+	return m.database.Delete(task).Error
 }

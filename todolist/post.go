@@ -18,6 +18,14 @@ func (t *TodoListServer) post() func(c *gin.Context) {
 			return
 		}
 
+		if err := task.ValidateByFields([]string{validateByShowingDate, validateByTitle, validateByDone}); err != nil {
+			logrus.WithError(err).Error("validation error")
+			c.JSON(200, map[string]string{
+				"error": err.Error(),
+			})
+			return
+		}
+
 		if err := t.repository.CreateNewTask(&task); err != nil {
 			logrus.WithError(err).Error("error creating new daily task")
 			c.JSON(200, map[string]string{
