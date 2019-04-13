@@ -20,7 +20,7 @@ var validators = map[string]func(task *Task) error{
 		return nil
 	},
 	validateByDone: func(task *Task) error {
-		if task.Done == 0 || task.Done == 1 {
+		if task.Done == -1 || task.Done == 1 {
 			return nil
 		}
 		return errors.New("incorrect `done` value")
@@ -43,7 +43,7 @@ type Task struct {
 	Id           uint64    `gorm:"primary_key;column:id" json:"id"`
 	Title        string    `gorm:"column:title" json:"title"`
 	UserID       uint64    `gorm:"column:user_id" json:"user_id"`
-	Done         int       `gorm:"column:done" json:"done"`
+	Done         int8      `gorm:"column:done" json:"done"`
 	ShowingDate  time.Time `gorm:"column:showing_date;default:''" json:"showing_date" time_format:"2006-01-02"`
 	DateInserted time.Time `gorm:"column:date_inserted;default:''" json:"date_inserted"`
 	DateUpdated  time.Time `gorm:"column:date_updated;default:''" json:"date_updated"`
