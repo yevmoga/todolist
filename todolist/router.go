@@ -23,7 +23,7 @@ func (t *TodoListServer) Launch() {
 
 	router.GET("/", t.get())
 	router.POST("/", t.post())
-	//router.PUT("/", t.put())
+	router.PUT("/", t.put())
 	//router.DELETE("/", t.delete())
 
 	if err := router.Run(); err != nil {
