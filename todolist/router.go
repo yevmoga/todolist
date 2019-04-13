@@ -22,7 +22,7 @@ func (t *TodoListServer) Launch() {
 	router := gin.Default()
 
 	router.GET("/", t.get())
-	//router.POST("/", t.post())
+	router.POST("/", t.post())
 	//router.PUT("/", t.put())
 	//router.DELETE("/", t.delete())
 
